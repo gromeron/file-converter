@@ -18,7 +18,7 @@ def index():
 
 @app.route('/user', methods=['GET'])
 def user():
-    u1 = User(username='Gusefalo', email='gasifero@gmail.com', password='2524323')
+    u1 = User(username='Hassler', email='hassler@gmail.com', password='2524323')
     db.session.add(u1)
     db.session.commit()
     users = User.query.all()

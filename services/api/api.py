@@ -20,7 +20,7 @@ db.session.commit()
 
 # test
 with app.app_context():
-    u1 = User(username='Gusefalo', email='gasifero@gmail.com', password='2524323')
+    u1 = User(username='Gusefalox', email='gasiferox@gmail.com', password='2524323x')
     db.session.add(u1)
     db.session.commit()
     print(User.query.all())

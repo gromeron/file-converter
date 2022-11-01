@@ -17,9 +17,11 @@ def index():
     return {"message": "home ok from ping route"}
 
 @app.route('/user', methods=['GET'])
-def user():
-    u1 = User(username='Hassler', email='hassler@gmail.com', password='2524323')
+def create_user():
+    u1 = User(username='Hassler', email='hassler@gmail.com', password='25242344')
+    app.logger.info(u1)
     db.session.add(u1)
     db.session.commit()
     users = User.query.all()
-    return app.logger.info(f'home ok {users}')
+    app.logger.info(f'Usuarios_DB = {users}')
+    return {"message":"okidoki"}

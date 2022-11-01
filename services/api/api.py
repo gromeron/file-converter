@@ -1,6 +1,7 @@
 from flask.cli import FlaskGroup
+from flask_restful import Api
 
-from project import app
+from project import ViewTasks, ViewUsers, app
 from project.models.models import db, User
 
 import logging
@@ -14,16 +15,26 @@ app_context.push()
 app.logger.setLevel(logging.INFO)
 
 db.init_app(app)
-db.drop_all()
+#db.drop_all()
 db.create_all()
-db.session.commit()
+#db.session.commit()
 
 # test
-with app.app_context():
-    u1 = User(username='Gusefalox', email='gasiferox@gmail.com', password='2524323x')
-    db.session.add(u1)
-    db.session.commit()
-    print(User.query.all())
+#with app.app_context():
+#    u1 = User(username='Gusefalox', email='gasiferox@gmail.com', password='2524323x')
+#    db.session.add(u1)
+#    db.session.commit()
+#    print(User.query.all())
+
+# API REST
+api = Api(app)
+
+# Users
+api.add_resource(ViewUsers, '/users')
+#api.add_resource(ViewUsers, '/user')
+
+# Tasks
+api.add_resource(ViewTasks, '/tasks')
 
 
 if __name__ == "__main__":

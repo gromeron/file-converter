@@ -34,7 +34,7 @@ api.add_resource(ViewUsers, '/api/auth/')
 #api.add_resource(ViewUsers, '/user')
 
 # Tasks
-api.add_resource(ViewTasks, '/tasks')
+api.add_resource(ViewTasks, '/api/tasks')
 
 
 if __name__ == "__main__":

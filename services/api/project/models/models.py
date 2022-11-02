@@ -33,8 +33,9 @@ class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     #timestamp = db.Column(db.Datetime, default=datetime.utcnow)
     status = db.Column(db.Enum(Status))
-    originalFormat = db.Column(db.Enum(FileFormat))
-    newFormat = db.Column(db.Enum(FileFormat))
+    #original_format = db.Column(db.Enum(FileFormat))
+    new_format = db.Column(db.Enum(FileFormat))
+    filename = db.Column(db.String(128))
     #user = db.relationship('User', backref='task')
     #user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
@@ -66,14 +67,15 @@ class UserSchema(SQLAlchemyAutoSchema):
 # Task
 class TaskSchema(SQLAlchemyAutoSchema):
     status = EnumADcicionario(attribute=('status'))
-    originalFormat = EnumADcicionario(attribute=('fileFormat'))
-    newFormat = EnumADcicionario(attribute=('fileFormat'))
+    #original_format = EnumADcicionario(attribute=('fileFormat'))
+    new_format = EnumADcicionario(attribute=('fileFormat'))
     class meta:
         model = Task
         include_relationship = True
         load_instance = True
 
     status = fields.String()
-    originalFormat = fields.String()
-    newFormat = fields.String()
+    #originalFormat = fields.String()
+    filename = fields.String()
+    new_format = fields.String()
     #user = fields.List(fields.Nested(UserSchema()))

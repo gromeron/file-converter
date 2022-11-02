@@ -42,9 +42,11 @@ def create_user():
 # Views API REST
 class ViewUsers(Resource):
 
+    
     def get(self):
         return [user_schema.dumps(user) for user in User.query.all()]
 
+    # Signup
     def post(self):
         new_user = User(username=request.json['username'],\
                     email=request.json['email'],\
@@ -54,6 +56,10 @@ class ViewUsers(Resource):
         db.session.commit()
         return user_schema.dumps(new_user)
 
+    # Login
+    
+
+
 class ViewTasks(Resource):
 
     def get(self):
@@ -61,9 +67,20 @@ class ViewTasks(Resource):
 
     def post(self):
         new_task = Task(status=request.json['status'],\
-                    originalFormat=request.json['originalFormat'],\
-                    newFormat=request.json['newFormat'])
+                    filename=request.json['filename'],\
+                    new_format=request.json['new_format'])
 
         db.session.add(new_task)
         db.session.commit()
         return task_schema.dump(new_task)
+
+
+    # Converter
+    def post(filename, new_format):
+        new_task = Task(status=request.json['status'],\
+                    filename=request.json['filename'],\
+                    new_format=request.json['new_format'])
+
+        db.session.add(new_task)
+        db.session.commit()
+        return {"message": "Tarea creada"}

@@ -58,9 +58,9 @@ class UserSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
-    #username = fields.String()
-    #email = fields.String()
-    #password = fields.String()
+    username = fields.String()
+    email = fields.String()
+    password = fields.String()
     #tasks = fields.List(fields.Nested(TaskSchema()))
 
 # Task
@@ -73,7 +73,7 @@ class TaskSchema(SQLAlchemyAutoSchema):
         include_relationship = True
         load_instance = True
 
-    #status = fields.String()
-    #originalFormat = fields.String()
-    #newFormat = fields.String()
+    status = fields.String()
+    originalFormat = fields.String()
+    newFormat = fields.String()
     #user = fields.List(fields.Nested(UserSchema()))

@@ -2,14 +2,14 @@ from urllib import request
 from flask import Flask, request
 from flask_restful import Resource
 
-from .models.models import db, User, Task, UserSchema, TaskSchema
+from .models.models import db, User, UserSchema, TaskSchema, Task
 
 app = Flask(__name__)
 app.config.from_object('project.config.Config')
 
 
-user_schema = UserSchema
-task_schema = TaskSchema
+user_schema = UserSchema()
+task_schema = TaskSchema()
 
 
 @app.route('/')
@@ -43,7 +43,7 @@ def create_user():
 class ViewUsers(Resource):
 
     def get(self):
-        return [user_schema.dump(user) for user in User.query.all()]
+        return [user_schema.dumps(user) for user in User.query.all()]
 
     def post(self):
         new_user = User(username=request.json['username'],\
@@ -52,7 +52,7 @@ class ViewUsers(Resource):
 
         db.session.add(new_user)
         db.session.commit()
-        return user_schema.dump(new_user)
+        return user_schema.dumps(new_user)
 
 class ViewTasks(Resource):
 

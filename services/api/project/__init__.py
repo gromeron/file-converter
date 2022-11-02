@@ -42,7 +42,6 @@ def create_user():
 # Views API REST
 class ViewUsers(Resource):
 
-    @app.endpoint('/users')
     def get(self):
         return [user_schema.dumps(user) for user in User.query.all()]
 

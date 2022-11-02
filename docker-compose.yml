@@ -17,7 +17,7 @@ services:
   api:
     build: ./services/api
     #command: python api.py run -h 0.0.0.0
-    command: gunicorn --bind 0.0.0.0:5000 api:app
+    command: gunicorn --bind 0.0.0.0:5000 api:app --reload
     volumes:
       - ./services/api/:/usr/src/app/
     ports:

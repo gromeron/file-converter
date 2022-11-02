@@ -13,13 +13,20 @@ services:
     build:
       context: ./services/api
       dockerfile: Dockerfile.prod
-    command: gunicorn --bind 0.0.0.0:5000 api:app --reload
-    ports:
-      - 5000:5000
+    command: gunicorn --bind 0.0.0.0:5000 api:app
+    expose:
+      - 5000
     env_file:
       - ./.env.prod
     depends_on:
       - db
+
+  nginx:
+    build: ./services/nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - api
 
 volumes:
   postgres_data_prod:

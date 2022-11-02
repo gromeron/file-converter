@@ -30,7 +30,7 @@ db.create_all()
 api = Api(app)
 
 # Users
-api.add_resource(ViewUsers, '/api/auth/')
+api.add_resource(ViewUsers, '/api/auth')
 #api.add_resource(ViewUsers, '/user')
 
 # Tasks

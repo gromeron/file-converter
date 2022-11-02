@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
-#from datetime import datetime
 import enum
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from datetime import datetime
 
 db = SQLAlchemy()
 

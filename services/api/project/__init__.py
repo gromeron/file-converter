@@ -43,7 +43,7 @@ def create_user():
 class ViewUsers(Resource):
 
     def get(self):
-        return [user_schema.dumps(user) for user in User.query.all()]
+        return [user_schema.dump(user) for user in User.query.all()]
 
     def post(self):
         new_user = User(username=request.json['username'],\
@@ -52,12 +52,12 @@ class ViewUsers(Resource):
 
         db.session.add(new_user)
         db.session.commit()
-        return user_schema.dumps(new_user)
+        return user_schema.dump(new_user)
 
 class ViewTasks(Resource):
 
     def get(self):
-        return [task_schema.dumps(task) for task in Task.query.all()]
+        return [task_schema.dump(task) for task in Task.query.all()]
 
     def post(self):
         new_task = Task(status=request.json['status'],\
@@ -66,4 +66,4 @@ class ViewTasks(Resource):
 
         db.session.add(new_task)
         db.session.commit()
-        return task_schema.dumps(new_task)
+        return task_schema.dump(new_task)

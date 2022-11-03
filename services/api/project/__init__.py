@@ -1,9 +1,11 @@
 from urllib import request
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
 from .models.models import db, User, UserSchema, TaskSchema, Task
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
 
@@ -96,3 +98,31 @@ class ViewFiles(Resource):
     def get(self):
 
         return {}
+
+
+# Static Fiels
+# /static/<path:filename>
+@app.route('/static/<filename>')
+def staticfiles(filename):
+    return send_from_directory(app.config['STATIC_FOLDER'], filename)
+
+
+# Media Files
+@app.route('/media/<filename>')
+def mediafiles(filename):
+    return send_from_directory(app.config['MEDIA_FOLDER'], filename)
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['MEDIAL_FOLDER'], filename))
+
+    return """
+    <!doctype html>
+    <title>upload new File</title>
+    <form action="" method=post enctype=multipart/form-data>
+      <p><input type=file name=file><input type=submit value=Upload>
+    </form>
+    """

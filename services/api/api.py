@@ -15,9 +15,9 @@ app_context.push()
 app.logger.setLevel(logging.INFO)
 
 db.init_app(app)
-#db.drop_all()
+db.drop_all()
 db.create_all()
-#db.session.commit()
+db.session.commit()
 
 # test
 #with app.app_context():
@@ -30,14 +30,9 @@ db.create_all()
 api = Api(app)
 
 # Users
-<<<<<<< HEAD
-api.add_resource(ViewUsers, '/api/auth')
-#api.add_resource(ViewUsers, '/user')
-=======
 api.add_resource(UserAddResource, '/api/auth/signup')
 api.add_resource(UserListResource, '/api/auth/users')
 api.add_resource(AuthResource, '/api/auth/login')
->>>>>>> bbbf13dca6fa29fc1c6784c126a13c2aaefad3c1
 
 # Tasks
 api.add_resource(ViewTasks, '/api/tasks')

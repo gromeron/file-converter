@@ -22,6 +22,7 @@ class User(db.Model):
     username = db.Column(db.String(128), nullable=False)
     email = db.Column(db.String(128), nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    
     #tasks = db.relationship('User', cascade='all, delete, delete-orphan')
 
 

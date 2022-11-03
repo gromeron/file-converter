@@ -1,7 +1,7 @@
 from flask.cli import FlaskGroup
 from flask_restful import Api
 
-from project import ViewUsers, app, ViewTasks
+from project import UserAddResource, UserListResource, AuthResource, app, ViewTasks
 from project.models.models import db
 
 import logging
@@ -30,8 +30,14 @@ db.create_all()
 api = Api(app)
 
 # Users
+<<<<<<< HEAD
 api.add_resource(ViewUsers, '/api/auth')
 #api.add_resource(ViewUsers, '/user')
+=======
+api.add_resource(UserAddResource, '/api/auth/signup')
+api.add_resource(UserListResource, '/api/auth/users')
+api.add_resource(AuthResource, '/api/auth/login')
+>>>>>>> bbbf13dca6fa29fc1c6784c126a13c2aaefad3c1
 
 # Tasks
 api.add_resource(ViewTasks, '/api/tasks')

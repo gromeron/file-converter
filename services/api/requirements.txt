@@ -14,3 +14,4 @@ marshmallow-sqlalchemy==0.28.1
 psycopg2-binary==2.9.4
 SQLAlchemy==1.4.42
 Werkzeug==2.2.2
+flask-jwt-extended

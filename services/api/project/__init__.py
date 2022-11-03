@@ -6,12 +6,10 @@ from flask_jwt_extended import JWTManager
 from .models.models import db, User, UserSchema, TaskSchema, Task
 
 app = Flask(__name__)
-app.config["JWT_SECRET_KEY"] = "secret-jwt"
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
-jwt = JWTManager(app)
 
 app.config.from_object('project.config.Config')
 
+jwt = JWTManager(app)
 
 user_schema = UserSchema()
 task_schema = TaskSchema()

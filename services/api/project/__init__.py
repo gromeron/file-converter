@@ -1,10 +1,15 @@
 from urllib import request
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_restful import Resource
-
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import JWTManager
 from .models.models import db, User, UserSchema, TaskSchema, Task
 
 app = Flask(__name__)
+app.config["JWT_SECRET_KEY"] = "secret-jwt"
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = False
+jwt = JWTManager(app)
+
 app.config.from_object('project.config.Config')
 
 
@@ -40,10 +45,7 @@ def create_user():
 
 
 # Views API REST
-class ViewUsers(Resource):
-
-    def get(self):
-        return [user_schema.dumps(user) for user in User.query.all()]
+class UserAddResource(Resource):    
 
     def post(self):
         new_user = User(username=request.json['username'],\
@@ -53,6 +55,17 @@ class ViewUsers(Resource):
         db.session.add(new_user)
         db.session.commit()
         return user_schema.dumps(new_user)
+
+class UserListResource(Resource):
+
+    def get(self):
+        return [user_schema.dumps(user) for user in User.query.all()]   
+
+class AuthResource(Resource):
+    def post(self):
+        new_user = User(username=request.json['username'], email=request.json['email'], password=request.json['password'])
+        access_token = create_access_token(identity="test")       
+        return jsonify(access_token=access_token)
 
 class ViewTasks(Resource):
 

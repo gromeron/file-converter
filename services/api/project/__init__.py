@@ -44,28 +44,35 @@ def create_user():
     return {"message":"okidoki"} """
 
 
-# Views API REST
+# api/auth/signup
 class UserAddResource(Resource):    
 
     def post(self):
-        new_user = User(username=request.json['username'],\
-                    email=request.json['email'],\
-                    password=request.json['password'])
+        if(request.json['password'] != request.json['confirmPassword']):
+            return jsonify("Password and ConfirmPassword must be equals.")
 
-        db.session.add(new_user)
+        user = User(username=request.json['username'], email=request.json['email'], password=request.json['password'])
+        db.session.add(user)
         db.session.commit()
-        return user_schema.dumps(new_user)
+        return user_schema.dumps(user)
 
 class UserListResource(Resource):
 
     def get(self):
         return [user_schema.dumps(user) for user in User.query.all()]   
 
+# api/auth/login
 class AuthResource(Resource):
-    def post(self):
-        new_user = User(username=request.json['username'], email=request.json['email'], password=request.json['password'])
-        access_token = create_access_token(identity="test")       
-        return jsonify(access_token=access_token)
+    def post(self):       
+        username = request.json['username']
+        password = request.json['password']
+
+        user = db.session.query(User).filter(User.username == username and User.password == password).first()
+        
+        access_token = "Username or password invalid."
+        if(user != None):
+            access_token = create_access_token(identity = username + password)
+        return jsonify(access_token = access_token)
 
 class ViewTasks(Resource):
 

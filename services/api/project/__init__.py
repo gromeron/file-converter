@@ -57,10 +57,8 @@ class AuthResource(Resource):
             access_token = create_access_token(identity = username + password)
         return jsonify(access_token = access_token)
 
-    # Login
-    
 
-
+# /api/tasks
 class ViewTasks(Resource):
 
     def get(self):
@@ -76,12 +74,25 @@ class ViewTasks(Resource):
         return task_schema.dump(new_task)
 
 
-    # Converter
-    def post(filename, new_format):
-        new_task = Task(status=request.json['status'],\
-                    filename=request.json['filename'],\
-                    new_format=request.json['new_format'])
+# /api/tasks/<int:id_task>
+class ViewTask(Resource):
 
-        db.session.add(new_task)
-        db.session.commit()
-        return {"message": "Tarea creada"}
+    def get(self, id_task):
+
+        return {}
+
+    def put(self, id_task):
+
+        return {}
+
+    def delete(self, id_task):
+
+        return {}
+
+    
+# /api/files/<filename>
+class ViewFiles(Resource):
+
+    def get(self):
+
+        return {}

@@ -40,7 +40,7 @@ class UserAddResource(Resource):
         user = User(username=request.json['username'], email=request.json['email'], password=request.json['password'])
         db.session.add(user)
         db.session.commit()
-        return user_schema.dumps(user)
+        return user_schema.dump(user)
 
 class UserListResource(Resource):
 
@@ -87,13 +87,17 @@ class ViewTask(Resource):
     def get(self, id_task):
         return task_schema.dump(Task.query.get_or_404(id_task))    
 
+    @jwt_required()
     def put(self, id_task):
 
         return {}
 
+    @jwt_required()
     def delete(self, id_task):
-
-        return {}
+        task = Task.query.get_or_404(id_task)
+        db.session.delete(task)
+        db.session.commit()
+        return 204
 
     
 # /api/files/<filename>

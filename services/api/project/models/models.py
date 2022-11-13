@@ -2,9 +2,9 @@ from flask_sqlalchemy import SQLAlchemy
 import enum
 from marshmallow import fields
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from datetime import datetime
 
 db = SQLAlchemy()
+
 
 class Status(enum.Enum):
     UPLOADED = 1
@@ -32,7 +32,8 @@ class User(db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    #timestamp = db.Column(db.Datetime, default=datetime.utcnow)
+    
+    timestamp = db.Column(db.TIMESTAMP)
     status = db.Column(db.Enum(Status))
     #original_format = db.Column(db.Enum(FileFormat))
     new_format = db.Column(db.Enum(FileFormat))
@@ -77,6 +78,8 @@ class TaskSchema(SQLAlchemyAutoSchema):
 
     status = fields.String()
     #originalFormat = fields.String()
+    id = fields.String()
     filename = fields.String()
+    timestamp = fields.String()
     new_format = fields.String()
     #user = fields.List(fields.Nested(UserSchema()))

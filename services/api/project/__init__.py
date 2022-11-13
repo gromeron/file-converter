@@ -3,9 +3,12 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import JWTManager
+from flask_jwt_extended import jwt_required
 from .models.models import db, User, UserSchema, TaskSchema, Task
 from werkzeug.utils import secure_filename
 import os
+from datetime import datetime
+
 
 app = Flask(__name__)
 
@@ -39,7 +42,7 @@ class UserAddResource(Resource):
         user = User(username=request.json['username'], email=request.json['email'], password=request.json['password'])
         db.session.add(user)
         db.session.commit()
-        return user_schema.dumps(user)
+        return user_schema.dump(user)
 
 class UserListResource(Resource):
 
@@ -62,14 +65,17 @@ class AuthResource(Resource):
 
 # /api/tasks
 class ViewTasks(Resource):
-
+    @jwt_required()
     def get(self):
         return [task_schema.dump(task) for task in Task.query.all()]
 
+    @jwt_required()
     def post(self):
-        new_task = Task(status=request.json['status'],\
-                    filename=request.json['filename'],\
-                    new_format=request.json['new_format'])
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        new_task = Task(status="UPLOADED",\
+                    filename=request.json['fileName'],\
+                    new_format=request.json['newFormat'],
+                    timestamp=timestamp)
 
         db.session.add(new_task)
         db.session.commit()
@@ -79,17 +85,21 @@ class ViewTasks(Resource):
 # /api/tasks/<int:id_task>
 class ViewTask(Resource):
 
+    @jwt_required()
     def get(self, id_task):
+        return task_schema.dump(Task.query.get_or_404(id_task))    
 
-        return {}
-
+    @jwt_required()
     def put(self, id_task):
 
         return {}
 
+    @jwt_required()
     def delete(self, id_task):
-
-        return {}
+        task = Task.query.get_or_404(id_task)
+        db.session.delete(task)
+        db.session.commit()
+        return 204
 
     
 # /api/files/<filename>

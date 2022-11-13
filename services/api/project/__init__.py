@@ -110,15 +110,16 @@ class ViewFiles(Resource):
         return {}
 
 
-# Static Fiels
+# Static Files
 # /static/<path:filename>
-@app.route('/static/<filename>')
+# /api/files/<path:filename>
+@app.route('/api/files/<filename>')
 def staticfiles(filename):
     return send_from_directory(app.config['STATIC_FOLDER'], filename)
 
 
 # Media Files
-@app.route('/media/<filename>')
+@app.route('/api/media/<filename>')
 def mediafiles(filename):
     return send_from_directory(app.config['MEDIA_FOLDER'], filename)
 
@@ -127,7 +128,7 @@ def upload_file():
     if request.method == 'POST':
         file = request.files['file']
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['MEDIAL_FOLDER'], filename))
+        file.save(os.path.join(app.config['MEDIA_FOLDER'], filename))
 
     return """
     <!doctype html>

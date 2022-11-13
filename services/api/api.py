@@ -33,7 +33,7 @@ api.add_resource(ViewTasks, '/api/tasks')
 api.add_resource(ViewTask, '/api/tasks/<int:id_task>')
 
 # Files
-api.add_resource(ViewFiles, '/api/files/<filename>')
+#api.add_resource(ViewFiles, '/api/files/<filename>')
 
 
 if __name__ == "__main__":

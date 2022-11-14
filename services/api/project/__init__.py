@@ -91,8 +91,12 @@ class ViewTask(Resource):
 
     @jwt_required()
     def put(self, id_task):
-
-        return {}
+        taskToUpdate = Task.query.get_or_404(id_task)
+        taskToUpdate.new_format = request.json.get(
+                "newFormat", taskToUpdate.new_format)
+        taskToUpdate.status = "UPLOADED";
+        db.session.commit()
+        return task_schema.dump(taskToUpdate)
 
     @jwt_required()
     def delete(self, id_task):

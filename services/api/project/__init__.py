@@ -8,7 +8,7 @@ from .models.models import db, User, UserSchema, TaskSchema, Task
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
-from celery import Celery
+#from celery import Celery
 
 
 
@@ -31,7 +31,7 @@ app.config.from_object('project.config.Config')
     celery.Task = ContextTask
     return celery
  """
-celery = Celery('tasks', broker= 'redis://35.239.105.189:6379/0')
+#celery = Celery('tasks', broker= 'redis://35.239.105.189:6379/0')
 
 
 jwt = JWTManager(app)
@@ -162,6 +162,6 @@ def upload_file():
     </form>
     """
 
-@app.route('/task', methods=['GET'])
-def convertion_instance_test():
-    celery.converter_test
+#@app.route('/task', methods=['GET'])
+#def convertion_instance_test():
+#    celery.converter_test

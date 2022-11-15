@@ -18,8 +18,8 @@ services:
     volumes:
       #- static_volume:/home/app/api/project/static
       - ./services/api/:/usr/src/app/
-    expose:
-      - 5000
+    #expose:
+      #- 5000
     #expose:
       #- 5000
     ports:

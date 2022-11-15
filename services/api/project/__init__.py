@@ -56,7 +56,7 @@ app.config.from_object('project.config.Config')
 
 #celery = make_celery(app)
  
-celery = Celery('tasks', broker= 'redis://35.239.105.189:6379/0')
+celery = Celery('tasks', broker= 'redis://35.222.185.225:6379/0')
 
 
 jwt = JWTManager(app)

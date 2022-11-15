@@ -11,6 +11,8 @@ from datetime import datetime
 from celery import Celery
 import sys
 
+#from 34.172.127.125 import file-converter 
+
 
 #from flask import Flask, render_template, request, redirect, url_for, send_from_directory, current_app, jsonify , make_response
 #from werkzeug.utils import secure_filename
@@ -36,25 +38,25 @@ app.config.from_object('project.config.Config')
 # Celery
 
 
-def make_celery(app):
-    celery = Celery(app.import_name)
+#def make_celery(app):
+    #celery = Celery(app.import_name)
     #celery.conf.update(CELERY_CONFIG={
     #'broker_url': 'redis://localhost:6379',
     #'result_backend': 'redis://localhost:6379'})
-    celery.conf.update(BROKER_URL=os.environ.get('REDIS_URL'),
-    CELERY_RESULT_BACKEND=os.environ.get('REDIS_URL'))
+    #celery.conf.update(BROKER_URL=os.environ.get('REDIS_URL'),
+    #CELERY_RESULT_BACKEND=os.environ.get('REDIS_URL'))
 
-    class ContextTask(celery.Task):
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                return self.run(*args, **kwargs)
+    #class ContextTask(celery.Task):
+        #def __call__(self, *args, **kwargs):
+            #with app.app_context():
+                #return self.run(*args, **kwargs)
 
-    celery.Task = ContextTask
-    return celery
+    #celery.Task = ContextTask
+    #return celery
 
-celery = make_celery(app)
+#celery = make_celery(app)
  
-#celery = Celery('tasks', broker= 'redis://35.239.105.189:6379/0')
+celery = Celery('tasks', broker= 'redis://35.239.105.189:6379/0')
 
 
 jwt = JWTManager(app)
@@ -198,5 +200,6 @@ def upload():
 
 @app.route('/converter-health', methods=['GET'])
 def converter_health():
-    celery.send_task("convertion")
+    celery.send_task("tasks.convertion")
+    #convertion.delay()
     return {"message": "send a task to celery"}

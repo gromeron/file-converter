@@ -171,8 +171,9 @@ def upload():
 			# Convert
 			dfile = '{}.{}'.format(os.path.splitext(filename)[0], str(format))
 			inputF = os.path.join(app.config['MEDIA_FOLDER'], filename)
+			outputF = os.path.join(app.config['MEDIA_FOLDER'], f'sample.{str(format)}')
 			print(inputF)
-			convert_COMMAND_LINE = [FTRANSC, '-f', str(format), inputF]
+			convert_COMMAND_LINE = ['ffmpeg', '-y', '-i', inputF, outputF]
 			executeOrder66 = sp.Popen(convert_COMMAND_LINE)
 
 			try:

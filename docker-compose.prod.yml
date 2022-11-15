@@ -16,7 +16,8 @@ services:
       dockerfile: Dockerfile
     command: gunicorn --bind 0.0.0.0:5000 api:app
     volumes:
-      - static_volume:/home/app/api/project/static
+      #- static_volume:/home/app/api/project/static
+      - ./services/api/:/usr/src/app/
     expose:
       - 5000
     #expose:

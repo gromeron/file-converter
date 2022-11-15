@@ -11,6 +11,8 @@ from datetime import datetime
 from celery import Celery
 import sys
 
+import tasks
+
 
 #from flask import Flask, render_template, request, redirect, url_for, send_from_directory, current_app, jsonify , make_response
 #from werkzeug.utils import secure_filename
@@ -198,5 +200,6 @@ def upload():
 
 @app.route('/converter-health', methods=['GET'])
 def converter_health():
-    celery.send_task("convertion")
+    #celery.send_task("convertion")
+    tasks.converter_test.delay()
     return {"message": "send a task to celery"}

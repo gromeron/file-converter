@@ -162,42 +162,30 @@ def staticfiles(filename):
 def mediafiles(filename):
     return send_from_directory(app.config['MEDIA_FOLDER'], filename)
 
-@app.route('/upload', methods=['GET', 'POST'])
-def upload_file():
+@app.route('/upload', methods=['POST'])
+def upload():
 	if request.method == 'POST':
-		file = request.files['file']
-		print(f'file value={file}', file=sys.stdout)
-  
-		if 'file' not in request.files or file.filename == '':
-			return redirect(url_for('home'))
+		format = request.form.get("format_select")
+		if str(format) in ALLOWED_EXTENSIONS:
+			filename = 'sample.mp3'
+			# Convert
+			dfile = '{}.{}'.format(os.path.splitext(filename)[0], str(format))
+			inputF = os.path.join(app.config['MEDIA_FOLDER'], filename)
+			print(inputF)
+			convert_COMMAND_LINE = [FTRANSC, '-f', str(format), inputF]
+			executeOrder66 = sp.Popen(convert_COMMAND_LINE)
 
-		if file and allowed_file(file.filename):
+			try:
+				outs, errs = executeOrder66.communicate(timeout=15)
+			except TimeoutError:
+				proc.kill()
 
-			format = request.form.get("format_select")
-			if str(format) in ALLOWED_EXTENSIONS:
-				filename = secure_filename(file.filename)
-				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+			ddir = os.path.join(current_app.root_path, app.config['MEDIA_FOLDER'])
+			return send_from_directory(ddir, dfile, as_attachment=True)
 
-				# Convert
-				print(f'format value={str(format)}')
-
-				dfile = '{}.{}'.format(os.path.splitext(filename)[0], str(format))
-				inputF = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-				convert_COMMAND_LINE = [FTRANSC, '-f', str(format), inputF]     
-				executeOrder66 = sp.Popen(convert_COMMAND_LINE)
-
-				try:
-					outs, errs = executeOrder66.communicate(timeout=150)
-				except TimeoutError:
-					proc.kill()
-
-				ddir = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
-  
-				return send_from_directory(ddir, dfile, as_attachment=True)
-
-		return render_template('home.html')
+		return 'ERROR'
 	else:
-		return redirect(url_for('home'))
+		return 'ERROR'
 
 #@app.route('/task', methods=['GET'])
 #def convertion_instance_test():

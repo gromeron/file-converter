@@ -11,11 +11,7 @@ from datetime import datetime
 from celery import Celery
 import sys
 
-<<<<<<< HEAD
 import tasks
-=======
-#from 34.172.127.125 import file-converter 
->>>>>>> 00d60de5b045028a845aafd7dad758706ee5aa9f
 
 
 #from flask import Flask, render_template, request, redirect, url_for, send_from_directory, current_app, jsonify , make_response

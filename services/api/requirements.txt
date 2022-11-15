@@ -15,3 +15,6 @@ psycopg2-binary==2.9.4
 SQLAlchemy==1.4.42
 Werkzeug==2.2.2
 flask-jwt-extended
+ftransc==7.0.3
+ffmpeg
+ffprobe

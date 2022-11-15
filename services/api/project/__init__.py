@@ -9,7 +9,22 @@ from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
 #from celery import Celery
+import sys
 
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, current_app, jsonify , make_response
+from werkzeug.utils import secure_filename
+import os
+from os import abort
+import subprocess as sp
+import sys
+
+
+FTRANSC = "ftransc"
+
+# Statics
+
+UPLOAD_FOLDER = '/project/media'
+ALLOWED_EXTENSIONS = set(['mp3', 'wav', 'ogg', 'flac'])
 
 
 app = Flask(__name__)
@@ -149,18 +164,40 @@ def mediafiles(filename):
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['MEDIA_FOLDER'], filename))
+	if request.method == 'POST':
+		file = request.files['file']
+		print(f'file value={file}', file=sys.stdout)
+  
+		if 'file' not in request.files or file.filename == '':
+			return redirect(url_for('home'))
 
-    return """
-    <!doctype html>
-    <title>upload new File</title>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file><input type=submit value=Upload>
-    </form>
-    """
+		if file and allowed_file(file.filename):
+
+			format = request.form.get("format_select")
+			if str(format) in ALLOWED_EXTENSIONS:
+				filename = secure_filename(file.filename)
+				file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+				# Convert
+				print(f'format value={str(format)}')
+
+				dfile = '{}.{}'.format(os.path.splitext(filename)[0], str(format))
+				inputF = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+				convert_COMMAND_LINE = [FTRANSC, '-f', str(format), inputF]     
+				executeOrder66 = sp.Popen(convert_COMMAND_LINE)
+
+				try:
+					outs, errs = executeOrder66.communicate(timeout=150)
+				except TimeoutError:
+					proc.kill()
+
+				ddir = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+  
+				return send_from_directory(ddir, dfile, as_attachment=True)
+
+		return render_template('home.html')
+	else:
+		return redirect(url_for('home'))
 
 #@app.route('/task', methods=['GET'])
 #def convertion_instance_test():

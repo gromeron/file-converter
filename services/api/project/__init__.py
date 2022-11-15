@@ -8,15 +8,16 @@ from .models.models import db, User, UserSchema, TaskSchema, Task
 from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
-#from celery import Celery
+from celery import Celery
 import sys
 
-from flask import Flask, render_template, request, redirect, url_for, send_from_directory, current_app, jsonify , make_response
-from werkzeug.utils import secure_filename
-import os
+
+#from flask import Flask, render_template, request, redirect, url_for, send_from_directory, current_app, jsonify , make_response
+#from werkzeug.utils import secure_filename
+#import os
 from os import abort
 import subprocess as sp
-import sys
+#import sys
 
 
 FTRANSC = "ftransc"
@@ -30,13 +31,18 @@ ALLOWED_EXTENSIONS = set(['mp3', 'wav', 'ogg', 'flac'])
 app = Flask(__name__)
 
 app.config.from_object('project.config.Config')
+#app.config.update(CELERY_CONFIG={"broker_url": os.environ.get("CELERY_BROKER_URL")})
 
 # Celery
 
 
-""" def make_celery(app):
+def make_celery(app):
     celery = Celery(app.import_name)
-    celery.conf.update(app.config["redis://35.239.105.189:6379/0"])
+    #celery.conf.update(CELERY_CONFIG={
+    #'broker_url': 'redis://localhost:6379',
+    #'result_backend': 'redis://localhost:6379'})
+    celery.conf.update(BROKER_URL=os.environ.get('REDIS_URL'),
+    CELERY_RESULT_BACKEND=os.environ.get('REDIS_URL'))
 
     class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):
@@ -45,7 +51,9 @@ app.config.from_object('project.config.Config')
 
     celery.Task = ContextTask
     return celery
- """
+
+celery = make_celery(app)
+ 
 #celery = Celery('tasks', broker= 'redis://35.239.105.189:6379/0')
 
 
@@ -188,6 +196,7 @@ def upload():
 	else:
 		return 'ERROR'
 
-#@app.route('/task', methods=['GET'])
-#def convertion_instance_test():
-#    celery.converter_test
+@app.route('/converter-health', methods=['GET'])
+def converter_health():
+    celery.send_task("convertion")
+    return {"message": "send a task to celery"}
